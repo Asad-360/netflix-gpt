@@ -1,6 +1,9 @@
 # Netflix GPT
-- Login / Signup
-- REDIRECT TO BROWSER PAGE.
+- Create React App
+- Configure TailwindCss
+- Header
+- Routing
+- Login / Signup Form
 
 # Getting Started with Create React App
 
