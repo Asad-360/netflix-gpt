@@ -17,6 +17,7 @@ function App() {
         >
           Learn React
         </a>
+        <h1 className='p-3 bg-orange-400'>Hello world</h1>
       </header>
     </div>
   );
