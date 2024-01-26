@@ -1,21 +1,6 @@
-import {
-  BG_URL,
-  TMBD_MOVIE_LIST_OPTIONS,
-  OPEN_AI_CHAT_URL,
-} from "../utils/constant";
+import GptMovieSuggestions from "./GptMovieSuggestion";
 import GptSearchBar from "./GptSearchBar";
 const GptSearch = () => {
-  // search movie in TMDB
-  const searchMovieTMDB = async (movie) => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/search/movie?query=" +
-        movie +
-        "&include_adult=false&language=en-US&page=1",
-      TMBD_MOVIE_LIST_OPTIONS
-    );
-    const json = await data.json();
-    return json.results;
-  };
   return (
     <div>
       <div className="fixed -z-10">
@@ -27,6 +12,7 @@ const GptSearch = () => {
       </div>
       <div className="">
         <GptSearchBar />
+        <GptMovieSuggestions/>
       </div>
     </div>
   );
