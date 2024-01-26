@@ -5,6 +5,9 @@
 - Routing
 - Login / Signup Form
 
+# React Notes
+- React.StrcitMode is used by react in development mode and it renders dom / api request twice so to remove any inconsistency.
+- Optional Chaining : JS is used for nullable conditions
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

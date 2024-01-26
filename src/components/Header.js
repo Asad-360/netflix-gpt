@@ -1,7 +1,56 @@
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../utils/firebase";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
+import { onAuthStateChanged } from "firebase/auth";
+import { toggleGptSearchView } from "../utils/gptSlice";
 const Header = () => {
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+      // Unsiubscribe when component unmounts
+      return () => unsubscribe();
+    });
+  }, []);
+
+
+  const handleGptSearchClick = () => {
+    // Toggle GPT Search
+    dispatch(toggleGptSearchView());
+  };
+
+  const handleSignOut = () => {
+    signOut(auth).catch((error) => {
+      // Todo: need to set some error
+      //navigate("/error");
+    });
+  };
   return (
-    <div className="absolute bg-gradient-to-b from-black to-transparent">
-      <div className="w-44 p-4 text-red-800">
+    <div className="absolute bg-gradient-to-b from-black to-transparent w-full flex justify-between px-4 z-50">
+      <div className="w-44 p-4 text-red-800 z-50">
         <svg
           viewBox="0 0 111 30"
           data-uia="netflix-logo"
@@ -17,6 +66,27 @@ const Header = () => {
             ></path>
           </g>
         </svg>
+      </div>
+      <button
+        className="py-2 px-4 mx-4 my-2 bg-purple-800 text-white rounded-lg"
+        onClick={handleGptSearchClick}
+      >
+        {showGptSearch ? "Homepage" : "GPT Search"}
+      </button>
+      <div className="flex justify-center align-middle">
+        {user && user.photoURL && (
+          <img
+            alt="user avatar url"
+            className="w-10 h-10 my-4 rounded mx-2"
+            src={user.photoURL}
+          />
+        )}
+        <p
+          onClick={handleSignOut}
+          className="text-white font-bold text-lg py-4 cursor-pointer"
+        >
+          Sign Out
+        </p>
       </div>
     </div>
   );
